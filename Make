@@ -1,0 +1,11 @@
+-R . MutualExclusion
+./binary/version2/Correctness.v 
+./binary/version2/Def.v   
+./binary/version2/SStreams.v 
+./binary/version1/Def.v 
+./binary/version1/Correctness.v
+./binary/version1/Soundness.v
+-custom "$(CAMLOPTLINK) -ccopt -s -o $@ -I +labltk labltk.cmxa ./binary/version1/mutex.mli ./binary/version1/mutex.ml ./binary/version1/mutex_prog.ml || echo 'Unsuccessful compilation of Ocaml extracted program'" "./binary/version1/Def.vo ./binary/version1/mutex_prog.ml" "./binary/version1/mutex_prog"
+-custom "ghcxmake $@ && strip $@ || echo 'Unsuccessful compilation of Haskell extracted program'" "./binary/version1/Def.vo ./binary/version1/Mutex_prog.hs" "./binary/version1/Mutex_prog"
+
+# $Id$

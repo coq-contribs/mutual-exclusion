@@ -1,0 +1,46 @@
+(***************************************************************)
+(*************** Pettersson's Algorithm ************************)
+(***************************************************************)
+
+
+This contribution contains a correctness proof of Petersson's
+algorithm for the problem of binary mutual exclusion. The proof makes
+use of streams to represent process traces. Some basic operators about
+streams are defined in order to express properties about the future.
+We prove correctness (both process will never be in the critical
+section at once) and also completeness (if they are fair scheduled,
+then both will be go intop the critical section an infinite number of
+times).
+
+There are two different versions of the proof:
+
+o Version 1 : we use a ``verification approach''. We specify the
+program and prove some properties about it.
+
+o Version 2 : we use a ``extraction approach''. The program is
+extracted from a specification.
+
+The xfig file tree.fig show the spread of possible traces for
+Petersson's protocol. The file automaton.fig shows that in fact this
+spread can be expressed as a finite graph.
+
+We also provide the Haskell files extracted from the proof and a small
+graphical interface (written with Goteborg's Fudgets) that enables to
+play with the protocol (file mutex). In order to compile it you 
+need Haskell 1.3 or later + the Fudgets library. To compile
+it, just make:
+
+> hbcxmake Mutex_prog
+
+or 
+
+> ghcxmake Mutex_prog
+
+and then run the file Mutex_prog.
+
+This contribution was developped by Eduardo Gimenez in July 1997.
+
+*** Update March 2004 (Pierre Letouzey): 
+There is now a second graphical interface in Ocaml+Labltk based on 
+ocaml extracted code. To compile it you need a recent Tcl/Tk library. 
+Then run "make". The program name is mutex_prog. 

@@ -1,0 +1,10 @@
+Name: MutualExclusion
+Title: A certification of Peterson's algorithm for managing mutual exclusion
+Author: Eduardo Giménez
+Institution: INRIA Rocquencourt
+Description: This is a proof of certification of Peterson's algorithm
+for managing mutual exclusion. The case of two processes is treated
+in the directory called ``binary'' (see the README file in this
+directory). The case of n processes will be available soon.
+Keywords: mutual exclusion problem Peterson's algorithm co-inductive
+types co-induction principle

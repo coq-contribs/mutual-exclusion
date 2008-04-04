@@ -1,0 +1,33 @@
+(* correct *)Compute init. 
+(* t   *) Compute  (proc true init).
+(* tt  *) Compute  (proc true  (proc true init)).
+(* ttf *) Compute (proc false (proc true  (proc true init)))  .     
+(* tff *) Compute (proc false (proc false  (proc true init))).
+(* f    *)Compute (proc false init).
+(* ft  *) Compute (proc true  (proc false init)).
+(* ff   *)Compute (proc false (proc false init)).
+(* fft  *)Compute (proc true  (proc false  (proc false init))).
+(* fff  *)Compute (proc false (proc false  (proc false init))).
+
+
+     = <OUT,OUT,false>  (* correct *)
+     : memo
+     = <DEM,OUT,false>  (* t   *)
+     : memo
+     = <SC,OUT,false>   (* tt  *)
+     : memo
+     = <SC,DEM,true>    (* ttf *)
+     : memo
+     = <DEM,DEM,true>   (* tf *)
+     : memo
+     = <OUT,DEM,true>   (* f   *)
+     : memo
+     = <DEM,DEM,false>  (* ft  *) 
+     : memo
+     = <OUT,SC,true>    (* ff   *)
+     : memo
+     = <DEM,SC,false>   (* fft  *)
+     : memo
+     = <OUT,OUT,true>   (* fff  *)
+     : memo
+
