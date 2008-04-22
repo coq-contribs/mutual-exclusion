@@ -8,3 +8,5 @@ in the directory called ``binary'' (see the README file in this
 directory). The case of n processes will be available soon.
 Keywords: mutual exclusion problem Peterson's algorithm co-inductive
 types co-induction principle
+Category: Computer Science/Concurrent Systems and Protocols/Correctness of specific protocols
+Category: Miscellaneous/Extracted Programs/Automata and protocols
