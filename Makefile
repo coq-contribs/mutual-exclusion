@@ -38,10 +38,10 @@ CAMLP4:=$(notdir $(CAMLP4LIB))
 COQSRC:=-I $(COQTOP)/kernel -I $(COQTOP)/lib \
   -I $(COQTOP)/library -I $(COQTOP)/parsing \
   -I $(COQTOP)/pretyping -I $(COQTOP)/interp \
-  -I $(COQTOP)/proofs -I $(COQTOP)/syntax -I $(COQTOP)/tactics \
+  -I $(COQTOP)/proofs -I $(COQTOP)/tactics \
   -I $(COQTOP)/toplevel -I $(COQTOP)/contrib/correctness \
   -I $(COQTOP)/contrib/extraction -I $(COQTOP)/contrib/field \
-  -I $(COQTOP)/contrib/fourier -I $(COQTOP)/contrib/graphs \
+  -I $(COQTOP)/contrib/fourier \
   -I $(COQTOP)/contrib/interface -I $(COQTOP)/contrib/jprover \
   -I $(COQTOP)/contrib/omega -I $(COQTOP)/contrib/romega \
   -I $(COQTOP)/contrib/ring -I $(COQTOP)/contrib/xml \
@@ -54,7 +54,7 @@ COQDEP:=$(COQBIN)coqdep -c
 GALLINA:=$(COQBIN)gallina
 COQDOC:=$(COQBIN)coqdoc
 CAMLC:=$(CAMLBIN)ocamlc -rectypes -c
-CAMLOPTC:=$(CAMLBIN)ocamlopt -c
+CAMLOPTC:=$(CAMLBIN)ocamlopt -rectypes -c
 CAMLLINK:=$(CAMLBIN)ocamlc
 CAMLOPTLINK:=$(CAMLBIN)ocamlopt
 GRAMMARS:=grammar.cma
@@ -79,8 +79,10 @@ VIFILES:=$(VFILES:.v=.vi)
 GFILES:=$(VFILES:.v=.g)
 HTMLFILES:=$(VFILES:.v=.html)
 GHTMLFILES:=$(VFILES:.v=.g.html)
+MLFILES:=
+CMOFILES:=$(MLFILES:.ml=.cmo)
 
-all: $(VOFILES) ./binary/version1/mutex_prog\
+all: $(VOFILES) $(CMOFILES) ./binary/version1/mutex_prog\
   ./binary/version1/Mutex_prog
 spec: $(VIFILES)
 
@@ -109,7 +111,7 @@ all-gal.ps: $(VFILES)
 ###################
 
 ./binary/version1/mutex_prog: ./binary/version1/Def.vo ./binary/version1/mutex_prog.ml
-	$(CAMLOPTLINK) -ccopt -s -o $@ -I +labltk labltk.cmxa ./binary/version1/mutex.mli ./binary/version1/mutex.ml ./binary/version1/mutex_prog.ml || echo 'Unsuccessful compilation of Ocaml extracted program'
+	$(CAMLOPTLINK) -ccopt -s -o $@ -I +labltk labltk.cmxa -I ./binary/version1/ ./binary/version1/mutex.mli ./binary/version1/mutex.ml ./binary/version1/mutex_prog.ml || echo 'Unsuccessful compilation of Ocaml extracted program'
 
 ./binary/version1/Mutex_prog: ./binary/version1/Def.vo ./binary/version1/Mutex_prog.hs
 	ghcxmake $@ && strip $@ || echo 'Unsuccessful compilation of Haskell extracted program'
@@ -121,6 +123,18 @@ all-gal.ps: $(VFILES)
 ####################
 
 .PHONY: all opt byte archclean clean install depend html
+
+%.cmi: %.mli
+	$(CAMLC) $(ZDEBUG) $(ZFLAGS) $<
+
+%.cmo: %.ml
+	$(CAMLC) $(ZDEBUG) $(ZFLAGS) $(PP) $<
+
+%.cmx: %.ml
+	$(CAMLOPTC) $(ZDEBUG) $(ZFLAGS) $(PP) $<
+
+%.ml.d: %.ml
+	$(CAMLBIN)ocamldep -slash $(ZFLAGS) $(PP) "$<" > "$@"
 
 %.vo %.glob: %.v
 	$(COQC) -dump-glob $*.glob $(COQDEBUG) $(COQFLAGS) $*
@@ -155,6 +169,7 @@ opt:
 install:
 	mkdir -p `$(COQC) -where`/user-contrib
 	cp -f $(VOFILES) `$(COQC) -where`/user-contrib
+	cp -f *.cmo `$(COQC) -where`/user-contrib
 
 Makefile: Make
 	mv -f Makefile Makefile.bak
@@ -164,6 +179,7 @@ Makefile: Make
 clean:
 	rm -f *.cmo *.cmi *.cmx *.o $(VOFILES) $(VIFILES) $(GFILES) *~
 	rm -f all.ps all-gal.ps all.glob $(VFILES:.v=.glob) $(HTMLFILES) $(GHTMLFILES) $(VFILES:.v=.tex) $(VFILES:.v=.g.tex) $(VFILES:.v=.v.d)
+	rm -f $(CMOFILES) $(MLFILES:.ml=.ml.d)
 	- rm -rf html
 	- rm -f ./binary/version1/mutex_prog
 	- rm -f ./binary/version1/Mutex_prog
@@ -174,6 +190,9 @@ archclean:
 
 -include $(VFILES:.v=.v.d)
 .SECONDARY: $(VFILES:.v=.v.d)
+
+-include $(MLFILES:.ml=.ml.d)
+.SECONDARY: $(MLFILES:.ml=.ml.d)
 
 # WARNING
 #
