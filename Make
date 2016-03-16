@@ -1,11 +1,12 @@
 -R . MutualExclusion
+
 ./binary/version2/Correctness.v 
 ./binary/version2/Def.v   
 ./binary/version2/SStreams.v 
 ./binary/version1/Def.v 
 ./binary/version1/Correctness.v
 ./binary/version1/Soundness.v
--custom "$(CAMLOPTLINK) -ccopt -s -o $@ -I +labltk labltk.cmxa -I ./binary/version1/ ./binary/version1/mutex.mli ./binary/version1/mutex.ml ./binary/version1/mutex_prog.ml || echo 'Unsuccessful compilation of Ocaml extracted program'" "./binary/version1/Def.vo ./binary/version1/mutex_prog.ml" "./binary/version1/mutex_prog"
--custom "ghcxmake $@ && strip $@ || echo 'Unsuccessful compilation of Haskell extracted program'" "./binary/version1/Def.vo ./binary/version1/Mutex_prog.hs" "./binary/version1/Mutex_prog"
 
-# $Id$
+-extra ./binary/version1/mutex_prog "./binary/version1/Def.vo ./binary/version1/mutex_prog.ml" "$(CAMLOPTLINK) -ccopt -s -o $@ -I $$(ocamlfind query labltk) labltk.cmxa -I ./binary/version1/ ./mutex.mli ./mutex.ml ./binary/version1/mutex_prog.ml || echo 'Unsuccessful compilation of Ocaml extracted program'" 
+
+-extra ./binary/version1/Mutex_prog "./binary/version1/Def.vo ./binary/version1/Mutex_prog.hs" "which ghcxmake && ghcxmake $@ && strip $@ || echo 'Unsuccessful compilation of Haskell extracted program'"
