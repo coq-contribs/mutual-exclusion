@@ -61,7 +61,8 @@ Proof.
 
 
 Ltac Connect :=
-  unfold Correctness in |- *; intro o; case o; intro b; case b;
+  let o := fresh "o" in
+  let b := fresh "b" in  unfold Correctness in |- *; intro o; case o; intro b; case b;
    (intros; constructor; [ exact I | simpl in |- *; auto ]).
 
 
