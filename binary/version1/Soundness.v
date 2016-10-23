@@ -215,7 +215,7 @@ intros x eq H m whichm.
 case whichm; SolveFurther eq.
 intros x diseq H hypind H1 m whichm.
 case whichm; SolveFurther (not_true_is_false (hd x)); auto with bool core.
-apply hypind; auto with v62.
+apply hypind; auto.
 apply (cf true false); auto with bool core.
 Qed.
 Hint Resolve fnf1.
