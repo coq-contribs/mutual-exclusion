@@ -1,6 +1,6 @@
 Name: MutualExclusion
 Title: A certification of Peterson's algorithm for managing mutual exclusion
-Author: Eduardo Giménez
+Author: Eduardo GimÃ©nez
 Institution: INRIA Rocquencourt
 Description: This is a proof of certification of Peterson's algorithm
 for managing mutual exclusion. The case of two processes is treated
