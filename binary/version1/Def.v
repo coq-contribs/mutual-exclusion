@@ -29,6 +29,7 @@
 
 Require Import Bool.
 Require Import Streams.
+Require Extraction.
 
 (* The three states of a given process. *)
  
